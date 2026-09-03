@@ -1,6 +1,6 @@
-// Cardápio padrão — usado como reserva se o Firebase não estiver configurado
-// e como semente inicial do Firestore na primeira vez que o painel abre.
-// A partir daí, tudo é lido/salvo no Firestore e editado pelo admin.html.
+// Cardápio padrão — usado como reserva se o Supabase não estiver configurado
+// e como semente inicial da tabela na primeira vez que o painel abre.
+// A partir daí, tudo é lido/salvo no Supabase e editado pelo admin.html.
 //
 // OBS: os preços abaixo são apenas um ponto de partida. Ajuste cada item
 // (preço, foto, disponibilidade) pelo painel administrativo (admin.html).

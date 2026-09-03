@@ -13,10 +13,10 @@
 </head>
 <body class="admin-body">
 
-<!-- aviso se o Firebase ainda não foi configurado -->
-<div class="admin-warning" id="firebaseWarning" hidden>
-  O Firebase ainda não foi configurado neste site. O painel não funciona sem isso.
-  Veja o arquivo <strong>CONFIGURAR-FIREBASE.md</strong> na pasta do site para o passo a passo.
+<!-- aviso se o Supabase ainda não foi configurado -->
+<div class="admin-warning" id="cloudWarning" hidden>
+  O Supabase ainda não foi configurado neste site. O painel não funciona sem isso.
+  Veja o arquivo <strong>CONFIGURAR-SUPABASE.md</strong> na pasta do site para o passo a passo.
 </div>
 
 <!-- login -->
@@ -127,12 +127,10 @@
   </div>
 </section>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="js/firebase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
 <script src="js/products-data.js"></script>
-<script src="js/products-store.js"></script>
+<script src="js/supabase-store.js"></script>
 <script src="js/illustrations.js"></script>
 <script src="js/admin.js"></script>
 </body>

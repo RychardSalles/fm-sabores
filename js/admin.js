@@ -16,63 +16,70 @@ function bindLogin() {
     errorEl.textContent = "";
     const email = document.getElementById("loginEmail").value.trim();
     const senha = document.getElementById("loginPassword").value;
-    const auth = fbAuth();
+    const auth = cloudAuth();
 
     if (!auth) {
-      errorEl.textContent = "Firebase não configurado. Veja CONFIGURAR-FIREBASE.md.";
+      errorEl.textContent = "Supabase não configurado. Veja CONFIGURAR-SUPABASE.md.";
       return;
     }
 
     try {
-      await auth.signInWithEmailAndPassword(email, senha);
+      const { error } = await auth.signInWithPassword({ email, password: senha });
+      if (error) {
+        errorEl.textContent = mensagemErroLogin(error);
+        console.warn("Erro de login:", error);
+      }
     } catch (err) {
       errorEl.textContent = mensagemErroLogin(err);
-      console.warn("Erro de login:", err.code, err.message);
+      console.warn("Erro de login:", err);
     }
   });
 }
 
 function mensagemErroLogin(err) {
-  const codigo = err && err.code;
-  if (codigo === "auth/user-not-found" || codigo === "auth/wrong-password" || codigo === "auth/invalid-credential") {
+  const msg = String((err && err.message) || "").toLowerCase();
+  if (msg.includes("invalid login credentials")) {
     return "E-mail ou senha inválidos.";
   }
-  if (codigo === "auth/invalid-email") {
-    return "E-mail em formato inválido.";
+  if (msg.includes("email not confirmed")) {
+    return "Este e-mail ainda não foi confirmado. Confirme pelo link enviado, ou desligue a confirmação de e-mail no Supabase (Authentication > Providers > Email).";
   }
-  if (codigo === "auth/too-many-requests") {
-    return "Muitas tentativas erradas. Aguarde um pouco e tente de novo.";
+  if (msg.includes("logins are disabled") || msg.includes("not enabled") || msg.includes("provider is not enabled")) {
+    return "O login por e-mail/senha não está ativado no Supabase (Authentication > Providers > Email).";
   }
-  if (codigo === "auth/configuration-not-found" || codigo === "auth/operation-not-allowed") {
-    return "O login por e-mail/senha ainda não foi ativado no Firebase (Authentication > Sign-in method).";
+  if (msg.includes("rate limit") || msg.includes("too many")) {
+    return "Muitas tentativas. Aguarde um pouco e tente de novo.";
   }
-  if (codigo === "auth/network-request-failed") {
-    return "Sem conexão com o Firebase. Verifique sua internet.";
+  if (msg.includes("failed to fetch") || msg.includes("network")) {
+    return "Sem conexão com o Supabase. Verifique sua internet e a URL do projeto.";
   }
-  return `Erro ao entrar (${codigo || "desconhecido"}). Veja o console (F12) para detalhes.`;
+  return `Erro ao entrar: ${(err && err.message) || "desconhecido"}. Veja o console (F12) para detalhes.`;
 }
 
 function bindLogout() {
   document.getElementById("logoutBtn").addEventListener("click", () => {
-    const auth = fbAuth();
+    const auth = cloudAuth();
     if (auth) auth.signOut();
   });
 }
 
 function watchAuthState() {
-  const auth = fbAuth();
+  const auth = cloudAuth();
   if (!auth) {
-    document.getElementById("firebaseWarning").hidden = false;
+    document.getElementById("cloudWarning").hidden = false;
     return;
   }
 
-  auth.onAuthStateChanged((user) => {
+  // No supabase-js v2, onAuthStateChange dispara já no carregamento com a
+  // sessão atual (evento INITIAL_SESSION), então não precisa de getSession manual.
+  auth.onAuthStateChange((_event, session) => {
+    const user = session && session.user;
     document.getElementById("loginScreen").hidden = !!user;
     document.getElementById("dashboard").hidden = !user;
 
-    if (user) {
+    if (user && !unsubscribeProducts) {
       startProductsListener();
-    } else if (unsubscribeProducts) {
+    } else if (!user && unsubscribeProducts) {
       unsubscribeProducts();
       unsubscribeProducts = null;
     }
@@ -361,7 +368,7 @@ function resetForm() {
 
 // ============ INIT ============
 // A ordem importa: primeiro ligamos os botões/formulários (não dependem do
-// Firebase), só depois checamos o estado de login. Assim, mesmo se o Firebase
+// Supabase), só depois checamos o estado de login. Assim, mesmo se o Supabase
 // falhar ao carregar, a página nunca fica com botões "mortos".
 document.addEventListener("DOMContentLoaded", () => {
   bindLogin();
@@ -372,6 +379,6 @@ document.addEventListener("DOMContentLoaded", () => {
     watchAuthState();
   } catch (err) {
     console.warn("Erro ao checar estado de login:", err);
-    document.getElementById("firebaseWarning").hidden = false;
+    document.getElementById("cloudWarning").hidden = false;
   }
 });
