@@ -54,11 +54,20 @@ create policy "Escrita apenas para autenticados"
   using (true)
   with check (true);
 
--- Atualização em tempo real (o site de outros dispositivos recebe as mudanças na hora)
+```
+
+Deve aparecer **"Success. No rows returned"**.
+
+### 3b. (opcional) Atualização em tempo real entre dispositivos
+
+Rode **numa query separada** (se der erro, não atrapalha o resto):
+
+```sql
 alter publication supabase_realtime add table public.produtos;
 ```
 
-Se aparecer um erro na última linha dizendo que a tabela **já está** na publicação, pode ignorar — está tudo certo.
+Sem isso o painel funciona igual — só os OUTROS aparelhos é que precisam recarregar
+a página pra ver as mudanças.
 
 ## 4. Ativar o login e criar o usuário do painel
 
