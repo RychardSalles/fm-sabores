@@ -9,6 +9,6 @@
 // Veja o passo a passo completo em CONFIGURAR-SUPABASE.md
 
 const SUPABASE_CONFIG = {
-  url: "COLE_AQUI",      // ex: https://abcdefghijklmno.supabase.co
-  anonKey: "COLE_AQUI",  // a chave "anon public" (pode ficar no código do site, não é secreta)
+  url: "https://yfetskilaxdlktzodika.supabase.co",
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlmZXRza2lsYXhkbGt0em9kaWthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0NDUyNjcsImV4cCI6MjEwNDAyMTI2N30.JOuPW1Hp7PKKcHT1MbEAMKCjsdKFvayWAHKITxddwmY",
 };
