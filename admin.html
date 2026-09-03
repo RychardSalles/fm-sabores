@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Painel Administrativo — FM Sabor Caseiro</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="assets/logo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="admin-body">
+
+<!-- aviso se o Firebase ainda não foi configurado -->
+<div class="admin-warning" id="firebaseWarning" hidden>
+  O Firebase ainda não foi configurado neste site. O painel não funciona sem isso.
+  Veja o arquivo <strong>CONFIGURAR-FIREBASE.md</strong> na pasta do site para o passo a passo.
+</div>
+
+<!-- login -->
+<section class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <img src="assets/logo.png" alt="FM Sabor Caseiro" class="login-logo" />
+    <h1>Área administrativa</h1>
+    <p class="login-sub">Entre com seu e-mail e senha para gerenciar o cardápio.</p>
+
+    <form id="loginForm" class="login-form">
+      <label>
+        E-mail
+        <input type="email" id="loginEmail" required autocomplete="username" />
+      </label>
+      <label>
+        Senha
+        <input type="password" id="loginPassword" required autocomplete="current-password" />
+      </label>
+      <p class="login-error" id="loginError"></p>
+      <button type="submit" class="btn btn-dark">Entrar</button>
+    </form>
+
+    <a href="index.html" class="back-link">← Voltar ao site</a>
+  </div>
+</section>
+
+<!-- painel -->
+<section class="dashboard" id="dashboard" hidden>
+  <header class="dash-header">
+    <div class="container dash-header-inner">
+      <img src="assets/logo.png" alt="FM Sabor Caseiro" class="dash-logo" />
+      <div>
+        <h1>Cardápio</h1>
+        <p>Gerencie os itens que aparecem no site.</p>
+      </div>
+      <a href="index.html" class="btn btn-outline" target="_blank" rel="noopener">Ver site</a>
+      <button type="button" id="logoutBtn" class="btn btn-outline">Sair</button>
+    </div>
+  </header>
+
+  <div class="container dash-body">
+
+    <div class="admin-warning" id="syncError" hidden></div>
+
+    <div class="empty-state-admin" id="emptyMsg" hidden>
+      <p>Preparando seu cardápio pela primeira vez, um segundo…</p>
+    </div>
+
+    <!-- formulário -->
+    <div class="admin-panel">
+      <h2 id="formTitle">Adicionar novo item</h2>
+      <form id="productForm" class="product-form">
+        <div class="form-row">
+          <label>
+            Nome do item
+            <input type="text" id="fieldName" placeholder="Ex: Marmita de Bife Acebolado" required />
+          </label>
+          <label class="field-sm">
+            Categoria
+            <input type="text" id="fieldCategory" list="categoryList" placeholder="Ex: Marmitas do Dia" required />
+            <datalist id="categoryList"></datalist>
+          </label>
+        </div>
+
+        <label>
+          Foto do item (opcional)
+          <input type="file" id="fieldImageFile" accept="image/*" />
+          <span class="field-hint">Escolha uma foto da galeria ou tire uma na hora, pelo celular ou computador. Deixe em branco para usar um ícone no lugar.</span>
+        </label>
+        <div class="image-preview-wrap">
+          <img id="imagePreview" class="image-preview" alt="Prévia da foto" hidden />
+          <button type="button" id="removeImageBtn" class="btn btn-outline btn-sm" hidden>Remover foto</button>
+        </div>
+
+        <div class="form-row">
+          <label class="field-sm">
+            Preço (R$)
+            <input type="number" id="fieldPrice" step="0.01" min="0" placeholder="20.00" required />
+          </label>
+          <label class="field-sm">
+            Preço original antes do desconto (opcional)
+            <input type="number" id="fieldOriginalPrice" step="0.01" min="0" placeholder="Ex: 24.00" />
+            <span class="field-hint">Preencha só se o item estiver em promoção. Aparece riscado no site.</span>
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label class="field-sm check-inline">
+            <input type="checkbox" id="fieldAvailable" checked />
+            Disponível para pedido
+          </label>
+        </div>
+
+        <label>
+          Descrição (opcional)
+          <textarea id="fieldDescription" rows="3" placeholder="O que acompanha, tamanho da porção, observações..."></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-dark">Salvar item</button>
+          <button type="button" id="cancelEditBtn" class="btn btn-outline" hidden>Cancelar edição</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- lista -->
+    <div class="admin-list" id="adminList"></div>
+  </div>
+</section>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/products-data.js"></script>
+<script src="js/products-store.js"></script>
+<script src="js/illustrations.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
