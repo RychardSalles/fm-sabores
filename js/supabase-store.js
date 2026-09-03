@@ -95,7 +95,7 @@ function subscribeProducts(callback) {
       callback(produtos);
     } catch (err) {
       console.warn("Erro ao carregar produtos do Supabase, usando catálogo local:", err);
-      callback(FALLBACK_PRODUCTS, err);
+      callback(FALLBACK_PRODUCTS, new Error(traduzErro(err)));
     }
   };
 

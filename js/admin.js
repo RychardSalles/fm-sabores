@@ -93,7 +93,7 @@ function watchAuthState() {
 // e excluíveis desde o primeiro segundo.
 let seedEmAndamento = false;
 
-// Sem internet (ou conexão instável), o Firestore aplica a mudança na tela de quem
+// Sem internet (ou conexão instável), o Supabase aplica a mudança na tela de quem
 // editou na hora, mas só entrega pros outros dispositivos quando a gravação realmente
 // chegar ao servidor — o que só acontece quando a conexão voltar. Como isso não gera
 // nenhum erro (só demora), avisamos a administradora se a gravação estiver demorando
@@ -114,7 +114,7 @@ function startProductsListener() {
     if (erro) {
       banner.hidden = false;
       banner.classList.remove("pending");
-      banner.textContent = `Não foi possível sincronizar com o Firestore agora (mostrando catálogo local): ${erro.message || erro.code || erro}`;
+      banner.textContent = `Não foi possível sincronizar com o Supabase agora (mostrando catálogo local): ${erro.message || erro.code || erro}`;
       return;
     }
     banner.hidden = true;
@@ -215,7 +215,7 @@ function renderAdminList(products) {
 }
 
 // ============ FOTO (upload da galeria/câmera, com compressão no navegador) ============
-// Evita estourar o limite de 1MB por documento do Firestore: redesenha a imagem
+// Mantém a imagem leve pra salvar rápido: redesenha a imagem
 // num <canvas> menor e exporta como JPEG comprimido antes de salvar.
 function comprimirImagem(file, larguraMax = 900, qualidade = 0.72) {
   return new Promise((resolve, reject) => {
