@@ -39,7 +39,7 @@ function formatPrice(value) {
 // ---- conversão entre a linha do banco (snake_case) e o objeto usado no site ----
 function rowToProduct(row) {
   return {
-    id: row.id,
+    id: String(row.id), // sempre string: o admin compara com data-* do HTML (que é texto)
     name: row.name || "",
     category: row.category || "",
     price: Number(row.price) || 0,
