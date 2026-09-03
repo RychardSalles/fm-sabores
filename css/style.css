@@ -1181,6 +1181,8 @@ img { max-width: 100%; display: block; }
   font-size: 14px;
 }
 .footer-contacts strong { color: var(--gold-light); }
+.footer-contacts a { border-bottom: 1px solid transparent; transition: border-color .2s; }
+.footer-contacts a:hover { border-color: var(--gold); }
 .footer-hours {
   text-align: center;
   color: var(--text-muted-2);
